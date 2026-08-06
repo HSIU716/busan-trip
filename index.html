@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>釜山＆慶州 7日秋季漫遊小工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-paper: #FAF6EE;
+            --ink-black: #2B2625;
+            --doodle-yellow: #FEF08A;
+            --doodle-pink: #FECDD3;
+            --doodle-blue: #BAE6FD;
+            --doodle-green: #BBF7D0;
+            --doodle-purple: #E9D5FF;
+            --doodle-orange: #FFEDD5;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-paper);
+            color: var(--ink-black);
+            background-image: radial-gradient(#e5decf 1px, transparent 0);
+            background-size: 16px 16px;
+            margin: 0;
+            padding-bottom: 90px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-doodle {
+            font-family: 'Gaegu', 'Patrick Hand', cursive, 'Noto Sans TC';
+        }
+
+        /* 手繪風格邊框與不規則陰影 */
+        .sketch-box {
+            border: 2px solid var(--ink-black);
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            box-shadow: 3px 4px 0px var(--ink-black);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            background: #FFFFFF;
+        }
+
+        .sketch-box:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 2px 0px var(--ink-black);
+        }
+
+        .sketch-btn {
+            border: 2px solid var(--ink-black);
+            border-radius: 255px 12px 225px 15px/12px 225px 15px 255px;
+            box-shadow: 2px 3px 0px var(--ink-black);
+            font-weight: bold;
+            transition: all 0.1s ease;
+        }
+
+        .sketch-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 1px 0px var(--ink-black);
+        }
+
+        .sketch-pill {
+            border: 2px solid var(--ink-black);
+            border-radius: 30px 10px 30px 10px/10px 30px 10px 30px;
+        }
+
+        .sketch-circle {
+            border: 2px solid var(--ink-black);
+            border-radius: 50% 45% 55% 40% / 45% 50% 40% 55%;
+        }
+
+        /* 高亮標籤樣式 */
+        .tag-food {
+            background-color: var(--doodle-pink);
+            border: 1.5px solid var(--ink-black);
+        }
+
+        .tag-menu {
+            background-color: var(--doodle-orange);
+            border: 1.5px solid var(--ink-black);
+        }
+
+        .tag-gift {
+            background-color: var(--doodle-purple);
+            border: 1.5px solid var(--ink-black);
+        }
+
+        .tag-booking {
+            background-color: var(--doodle-green);
+            border: 1.5px solid var(--ink-black);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .modal-bg {
+            background-color: rgba(43, 38, 37, 0.65);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto relative min-h-screen border-x-0 sm:border-x-2 border-stone-800 shadow-2xl">
+
+    <header class="sticky top-0 z-30 bg-[#FAF6EE]/95 backdrop-blur-sm px-4 pt-3 pb-2 border-b-2 border-stone-800">
+        <div class="flex justify-between items-center mb-2">
+            <div>
+                <span class="text-xs font-bold px-2 py-0.5 bg-yellow-200 border border-stone-800 rounded-full font-doodle">🍁 2026 釜山＆慶州秋遊</span>
+                <h1 class="text-xl font-black tracking-tight text-stone-900 mt-0.5">釜山隨身導遊小幫手</h1>
+            </div>
+            <button onclick="openInfoModal()" class="sketch-circle w-10 h-10 bg-white flex items-center justify-center text-stone-800 hover:bg-yellow-100">
+                <i class="fa-solid fa-hotel text-lg"></i>
+            </button>
+        </div>
+
+        <!-- 天數切換籤頁 -->
+        <div class="flex overflow-x-auto gap-2 py-1 no-scrollbar text-center font-doodle" id="day-tabs">
+            <!-- 由 JS 動態生成 Day 1 ~ Day 7 -->
+        </div>
+    </header>
+
+    <main class="px-4 pt-3 pb-6">
+        
+        <!-- 當日天氣概況卡片 -->
+        <div id="weather-card" class="sketch-box p-3.5 mb-4 bg-amber-50 relative overflow-hidden">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                    <div id="weather-icon" class="text-3xl">🌤️</div>
+                    <div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="weather-temp" class="text-2xl font-black">15°C - 21°C</span>
+                            <span id="weather-loc" class="text-xs font-bold px-1.5 py-0.5 bg-white border border-stone-800 rounded">釜山廣域市</span>
+                        </div>
+                        <p id="weather-desc" class="text-xs font-medium text-stone-700 mt-0.5">秋高氣爽，微風宜人・降雨率 10%</p>
+                    </div>
+                </div>
+            </div>
+            <div id="weather-outfit" class="mt-2 text-xs bg-white/80 p-2 rounded border border-dashed border-stone-400 text-stone-800">
+                🧥 <strong>穿搭建議：</strong> 薄長袖 + 便攜保暖外衣
+            </div>
+        </div>
+
+        <!-- 分類過濾標籤 -->
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-1" id="category-filters">
+                <button onclick="filterCategory('all')" class="filter-btn active sketch-pill px-3 py-1 text-xs font-bold bg-stone-800 text-white">全部</button>
+                <button onclick="filterCategory('attraction')" class="filter-btn sketch-pill px-3 py-1 text-xs font-bold bg-white text-stone-800">📍 景點</button>
+                <button onclick="filterCategory('food')" class="filter-btn sketch-pill px-3 py-1 text-xs font-bold bg-white text-stone-800">🍎 美食</button>
+                <button onclick="filterCategory('transit')" class="filter-btn sketch-pill px-3 py-1 text-xs font-bold bg-white text-stone-800">🚗 交通</button>
+                <button onclick="filterCategory('special')" class="filter-btn sketch-pill px-3 py-1 text-xs font-bold bg-white text-stone-800">🔑 預約/醫美</button>
+            </div>
+            <button onclick="openAddModal()" class="sketch-btn px-2.5 py-1 bg-yellow-300 text-xs text-stone-900 flex items-center gap-1 shrink-0">
+                <i class="fa-solid fa-plus"></i> 新增
+            </button>
+        </div>
+
+        <!-- 行程完成進度條 -->
+        <div class="mb-4 bg-white p-2 border border-stone-800 rounded-lg shadow-sm flex items-center gap-3">
+            <span class="text-xs font-bold font-doodle text-stone-700 shrink-0">Today Progress</span>
+            <div class="w-full bg-stone-200 h-3 rounded-full overflow-hidden border border-stone-800">
+                <div id="progress-bar" class="bg-yellow-400 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <span id="progress-text" class="text-xs font-black text-stone-800 shrink-0">0/0</span>
+        </div>
+
+        <!-- 行程列表容器 -->
+        <div id="schedule-container" class="space-y-4">
+            <!-- JS 動態繪製 -->
+        </div>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t-2 border-stone-800 px-3 py-2 z-30 flex justify-around text-center">
+        <button onclick="switchTab('itinerary')" id="nav-itinerary" class="nav-btn flex flex-col items-center text-stone-900">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-yellow-200 border border-stone-800">
+                <i class="fa-solid fa-map-location-dot text-sm"></i>
+            </div>
+            <span class="text-[10px] font-bold mt-1 font-doodle">行程地圖</span>
+        </button>
+        <button onclick="switchTab('transit')" id="nav-transit" class="nav-btn flex flex-col items-center text-stone-500">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-stone-100 border border-stone-800">
+                <i class="fa-solid fa-taxi text-sm"></i>
+            </div>
+            <span class="text-[10px] font-bold mt-1 font-doodle">自駕計程車</span>
+        </button>
+        <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn flex flex-col items-center text-stone-500">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-stone-100 border border-stone-800">
+                <i class="fa-solid fa-book-open text-sm"></i>
+            </div>
+            <span class="text-[10px] font-bold mt-1 font-doodle">導遊懶人包</span>
+        </button>
+        <button onclick="switchTab('notes')" id="nav-notes" class="nav-btn flex flex-col items-center text-stone-500">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-stone-100 border border-stone-800">
+                <i class="fa-solid fa-pen-to-square text-sm"></i>
+            </div>
+            <span class="text-[10px] font-bold mt-1 font-doodle">記帳備忘</span>
+        </button>
+    </nav>
+
+    <!-- 交通 & 計程車 Naver Map View -->
+    <div id="view-transit" class="hidden px-4 pt-3 pb-24">
+        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">🚕 自駕 & 韓文計程車 Naver 導航卡</h2>
+        
+        <div class="sketch-box p-3 mb-4 bg-sky-50">
+            <h3 class="font-bold text-sm text-stone-900 mb-1">💡 Naver Map 導航與計程車貼士</h3>
+            <p class="text-xs text-stone-700 leading-relaxed">
+                釜山與慶州自駕時，推薦搭配 <strong>Naver Map (네이버 지도)</strong>！點擊每個地點下的「🗺️ Naver 導航」即可直接調起導航，亦可點選複製地址出示給計程車司機。
+            </p>
+        </div>
+
+        <div class="space-y-3" id="transit-cards-list">
+            <!-- JS 生成 -->
+        </div>
+    </div>
+
+    <!-- 導遊懶人包 View -->
+    <div id="view-guide" class="hidden px-4 pt-3 pb-24">
+        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">📖 全行程必吃必買 & 故事總整理</h2>
+        
+        <div class="space-y-4">
+            <div class="sketch-box p-3 bg-pink-50">
+                <h3 class="font-bold text-sm text-pink-900 mb-2 flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 🍎 必吃美食懶人包
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-food-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+
+            <div class="sketch-box p-3 bg-purple-50">
+                <h3 class="font-bold text-sm text-purple-900 mb-2 flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-purple-400 inline-block"></span> 🎁 必買伴手禮清單
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-gift-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+
+            <div class="sketch-box p-3 bg-emerald-50">
+                <h3 class="font-bold text-sm text-emerald-900 mb-2 flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> 🔑 重要預約與醫美提醒
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-booking-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隨手記帳 View -->
+    <div id="view-notes" class="hidden px-4 pt-3 pb-24">
+        <div class="flex justify-between items-center mb-3 border-b-2 border-stone-800 pb-1">
+            <h2 class="text-lg font-black text-stone-900">💰 旅遊隨手記帳 (KRW ₩)</h2>
+            <button onclick="openAddExpenseModal()" class="sketch-btn px-2.5 py-1 bg-green-300 text-xs font-bold text-stone-900">
+                + 記一筆
+            </button>
+        </div>
+
+        <div class="sketch-box p-3 mb-4 bg-emerald-50 flex justify-between items-center">
+            <div>
+                <span class="text-xs text-stone-600 block">累積總花費</span>
+                <span id="total-expense-krw" class="text-2xl font-black text-stone-900">₩ 0</span>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-stone-600 block">約合台幣 (匯率 42)</span>
+                <span id="total-expense-twd" class="text-lg font-bold text-emerald-800">NT$ 0</span>
+            </div>
+        </div>
+
+        <div id="expense-list" class="space-y-2">
+            <!-- Dynamic expense items -->
+        </div>
+    </div>
+
+    <!-- 導遊懶人包 View -->
+    <div id="view-guide" class="hidden px-4 pt-3 pb-24">
+        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">📖 全行程必吃必買、預約 & 預算總整理</h2>
+        
+        <div class="space-y-4">
+            <!-- VISIT BUSAN PASS 48h & 票券預約 -->
+            <div class="sketch-box p-3 bg-yellow-50 border-2 border-amber-600">
+                <h3 class="font-bold text-sm text-amber-900 mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-ticket text-amber-600"></i> 🎟️ VISIT BUSAN PASS 48h & 票券預約
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-booking-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+
+            <!-- 雙人預算估算卡 -->
+            <div class="sketch-box p-3 bg-blue-50">
+                <h3 class="font-bold text-sm text-blue-900 mb-2 flex items-center justify-between">
+                    <span>💰 2 人預算預估 (不含住宿/購物/醫美)</span>
+                    <span class="text-xs bg-blue-200 text-blue-900 px-2 py-0.5 rounded font-bold font-mono">約 NT$ 12.5k - 16.5k</span>
+                </h3>
+                <div class="grid grid-cols-2 gap-1.5 text-[11px] text-stone-700 font-medium">
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🎟️ VISIT BUSAN PASS 48h: <strong>₩170,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚄 KTX 慶州來回: <strong>₩60,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚃 Sky Capsule: <strong>₩40,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚇 地鐵交通估算: <strong>₩25,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">👓 配眼鏡預算: <strong>₩120k-300k</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🍖 雙人餐飲預算: <strong>₩250k-350k</strong></div>
+                </div>
+            </div>
+
+            <!-- 必吃美食 -->
+            <div class="sketch-box p-3 bg-pink-50">
+                <h3 class="font-bold text-sm text-pink-900 mb-2 flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 🍎 必吃美食地圖總整理
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-food-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+
+            <!-- 必買清單 -->
+            <div class="sketch-box p-3 bg-purple-50">
+                <h3 class="font-bold text-sm text-purple-900 mb-2 flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-purple-400 inline-block"></span> 🎁 必買購物清單 (南浦/西面/Centum)
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-gift-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 飯店與緊急資訊 Modal -->
+    <div id="modal-info" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
+        <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
+            <button onclick="closeModal('modal-info')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
+            <h3 class="text-base font-black text-stone-900 mb-2">🏨 住宿與緊急資訊</h3>
+            <p class="text-xs text-stone-700 leading-relaxed mb-2"><strong>飯店地址：</strong><br>부산 중구 중앙동4가 74-9</p>
+            <p class="text-xs text-stone-700 leading-relaxed mb-2"><strong>入住/退房：</strong> Check-in 15:00 / Check-out 11:00</p>
+            <p class="text-xs text-stone-700 leading-relaxed"><strong>緊急電話：</strong> 韓國旅遊諮詢 1330 / 報警 112</p>
+        </div>
+    </div>
+
+    <!-- 導遊故事 Modal -->
+    <div id="modal-story" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
+        <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
+            <button onclick="closeModal('modal-story')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
+            <h3 id="story-title" class="text-base font-black text-stone-900 mb-2"></h3>
+            <p id="story-content" class="text-xs text-stone-700 leading-relaxed whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- 3. 新增/編輯行程卡片 Modal -->
+    <div id="modal-add" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
+        <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
+            <button onclick="closeModal('modal-add')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
+            <h3 class="text-lg font-black text-stone-900 mb-3">➕ 新增行程項目</h3>
+            
+            <form id="add-item-form" onsubmit="handleAddItem(event)" class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-bold block mb-1">時間</label>
+                    <input type="text" id="add-time" placeholder="例如: 12:30" required class="w-full p-2 border-2 border-stone-800 rounded">
+                </div>
+                <div>
+                    <label class="font-bold block mb-1">地點/項目名稱</label>
+                    <input type="text" id="add-title" placeholder="例如: 松島海上纜車" required class="w-full p-2 border-2 border-stone-800 rounded">
+                </div>
+                <div>
+                    <label class="font-bold block mb-1">分類</label>
+                    <select id="add-category" class="w-full p-2 border-2 border-stone-800 rounded bg-white">
+                        <option value="attraction">📍 景點</option>
+                        <option value="food">🍎 美食</option>
+                        <option value="transit">🚗 交通</option>
+                        <option value="special">🔑 預約/醫美</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bold block mb-1">簡介/重點標記</label>
+                    <input type="text" id="add-desc" placeholder="必吃或備註..." class="w-full p-2 border-2 border-stone-800 rounded">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-add')" class="sketch-btn px-3 py-1.5 bg-stone-200">取消</button>
+                    <button type="submit" class="sketch-btn px-4 py-1.5 bg-yellow-300 font-bold">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. 新增記帳 Modal -->
+    <div id="modal-expense" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
+        <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
+            <button onclick="closeModal('modal-expense')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
+            <h3 class="text-lg font-black text-stone-900 mb-3">💰 記一筆花費</h3>
+            
+            <form onsubmit="handleAddExpense(event)" class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-bold block mb-1">項目內容</label>
+                    <input type="text" id="exp-title" placeholder="例如: 皇理團路10韓元餅" required class="w-full p-2 border-2 border-stone-800 rounded">
+                </div>
+                <div>
+                    <label class="font-bold block mb-1">金額 (韓元 KRW ₩)</label>
+                    <input type="number" id="exp-amount" placeholder="3000" required class="w-full p-2 border-2 border-stone-800 rounded">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-expense')" class="sketch-btn px-3 py-1.5 bg-stone-200">取消</button>
+                    <button type="submit" class="sketch-btn px-4 py-1.5 bg-green-300 font-bold">記下</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const itineraryData = [
+            {
+                day: 1,
+                date: "10/21",
+                week: "三",
+                title: "抵達釜山・南浦洞夜遊",
+                weather: { temp: "16°C - 21°C", loc: "南浦洞", desc: "舒適秋風・夜間偏涼", outfit: "🧥 薄長袖 + 便攜保暖外衣" },
+                items: [
+                    {
+                        id: "d1-1",
+                        time: "19:00",
+                        title: "抵達金海國際機場 (PUS)",
+                        category: "transit",
+                        korean: "김해국제공항",
+                        desc: "辦理入境與提領行李，可先於機場加值 T-money 交通卡。",
+                        story: "金海機場入境快速便利！建議在機場順利啟用網路與交通卡。"
+                    },
+                    {
+                        id: "d1-2",
+                        time: "20:00 - 20:45",
+                        title: "飯店 Check-in (中央站住宿)",
+                        category: "transit",
+                        korean: "부산 중구 중앙동4가 74-9",
+                        desc: "搭乘計程車或地鐵1號線至中央站飯店放行李（74-9 Jungang-dong 4-ga）。",
+                        story: "中央站臨近南浦洞商圈，既便利又鬧中取靜。"
+                    },
+                    {
+                        id: "d1-3",
+                        time: "21:00",
+                        title: "BIFF 廣場 ➔ 光復路 ➔ 龍頭山公園",
+                        category: "attraction",
+                        korean: "BIFF광장 / 용두산공원",
+                        mustEat: "BIFF深處種子糖餅 (씨앗호떡), 參兵豬肉湯飯 (참병국밥), 南浦洞街頭小吃",
+                        mustGift: "Olive Young 南浦店, ABC Mart, Adidas, 大創 Daiso, 樂天超市光復店",
+                        desc: "品嚐最地道的黑糖種子餅與湯飯，晚上可順遊光復路商圈或登龍頭山公園夜景。",
+                        story: "【種子糖餅】炸得金黃酥脆的餅皮包裹滿滿葵花子與黑糖，是南浦洞的必吃經典！"
+                    }
+                ]
+            },
+            {
+                day: 2,
+                date: "10/22",
+                week: "四",
+                title: "甘川文化村＋松島海岸＋電影文化",
+                weather: { temp: "14°C - 20°C", loc: "沙下區/西區", desc: "晴時多雲・海風微涼", outfit: "👟 輕便好走運動鞋（階梯較多）" },
+                items: [
+                    {
+                        id: "d2-1",
+                        time: "09:30 - 12:00",
+                        title: "甘川文化村 (Gamcheon Culture Village)",
+                        category: "attraction",
+                        korean: "감천문화마을",
+                        mustGift: "甘川特色手繪明信片, 文創小店紀念品",
+                        desc: "漫步小王子與沙漠狐狸拍照點、彩虹階梯、屋頂觀景平台及逛文創小店。",
+                        story: "【甘川故事】被稱為『釜山馬丘比丘』，昔日難民村如今翻轉為浪漫彩虹梯田部落。"
+                    },
+                    {
+                        id: "d2-2",
+                        time: "12:30 - 15:30",
+                        title: "松島海岸 (天空步道 & 海上纜車)",
+                        category: "attraction",
+                        korean: "송도해수욕장 / 송도해상케이블카",
+                        desc: "體驗松島天空步道透明玻璃橋，以及搭乘橫跨海面的松島海上纜車與海岸散步道。",
+                        story: "松島海水浴場是韓國第一個公立海水浴場，水晶纜車車廂底板透明，俯瞰蔚藍海景超震撼！"
+                    },
+                    {
+                        id: "d2-3",
+                        time: "16:00 - 18:00",
+                        title: "電影文化支線：寶水洞書街 / 白淺灘 / 電影體驗博物館",
+                        category: "attraction",
+                        korean: "보수동책방골목 / 흰여울문화마을 / 부산영화체험박물관",
+                        bookingCode: "PASS 可免費換釜山電影體驗博物館門票",
+                        desc: "順遊寶水洞復古書街、白淺灘絕美海岸線村落，或使用 PASS 參觀電影博物館。",
+                        story: "寶水洞書街保留濃濃復古書香氣息；白淺灘則是《辯護人》取景地，海岸景致極佳。"
+                    },
+                    {
+                        id: "d2-4",
+                        time: "18:30",
+                        title: "晚餐：草梁本家小麥冷麵 或 螞蟻家章魚肥腸鍋",
+                        category: "food",
+                        korean: "초량본가밀면 / 개미집",
+                        mustEat: "草梁本家小麥冷麵, 螞蟻家辣炒章魚豬腸蝦仁 (낙곱새)",
+                        mustOrder: "낙곱새 (Nak-Gop-Sae) + 泡面加碼",
+                        desc: "享用釜山特有的小麥冷麵，或十分下飯的螞蟻家辣炒章魚腸鍋！",
+                        story: "【낙곱새】章魚、牛腸、蝦仁在獨門辣醬下滾煮，拌入白飯與海苔絲非常過癮！"
+                    }
+                ]
+            },
+            {
+                day: 3,
+                date: "10/23",
+                week: "五",
+                title: "慶州古都粉色芒草一日遊",
+                weather: { temp: "12°C - 19°C", loc: "慶州市", desc: "秋高氣爽・早晚偏冷", outfit: "🧥 中等厚度外套/保暖圍巾" },
+                items: [
+                    {
+                        id: "d3-1",
+                        time: "08:00 - 08:35",
+                        title: "KTX: 釜山站 ➔ 新慶州站 (去程 08:00)",
+                        category: "transit",
+                        bookingCode: "KTX-BUSAN-SINGYEONGJU-0800",
+                        korean: "부산역 -> 신경주역",
+                        desc: "車程僅約 30 分鐘，開啟千年古都慶州秋日巡禮！",
+                        story: "慶州全城宛如沒有屋頂的博物館，10月下旬秋意正濃。"
+                    },
+                    {
+                        id: "d3-2",
+                        time: "09:30 - 12:00",
+                        title: "普門觀光園區 & 普門湖步道 & 皇龍園",
+                        category: "attraction",
+                        korean: "보문관광단지 / 皇龍園",
+                        desc: "欣賞普門湖畔秋季步道風光與皇龍園地標九層木塔壯麗建築。",
+                        story: "普門湖週邊秋景宜人，搭配黃龍重光塔景色古典宏偉。"
+                    },
+                    {
+                        id: "d3-3",
+                        time: "12:00 - 13:30",
+                        title: "午餐：慶州韓牛 或 傳統韓定食套餐",
+                        category: "food",
+                        korean: "경주 한우 / 한정식",
+                        mustEat: "慶州優質韓牛燒肉, 豐盛韓定食宮廷小菜",
+                        desc: "品嚐慶州當地的優質鮮嫩韓牛或精緻多樣的傳統韓定食。",
+                        story: "慶州韓牛口感鮮甜且多汁，是前往慶州必嚐的極品美食。"
+                    },
+                    {
+                        id: "d3-4",
+                        time: "14:00 - 17:00",
+                        title: "皇理團路 ➔ 瞻星台粉紅亂子草 ➔ 大陵苑 (天馬塚)",
+                        category: "attraction",
+                        korean: "황리단길 / 첨성대 / 대릉원",
+                        mustEat: "10韓元起司餅, 皇南玉米",
+                        mustGift: "慶州皇南餅禮盒",
+                        desc: "拍攝瞻星台旁盛開的夢幻粉紅亂子草花海，隨後漫步皇理團路韓屋街與大陵苑。",
+                        story: "【瞻星台粉紅亂子草】10 月下旬為最佳觀賞期，粉色芒草有如雲霧般夢幻迷人！"
+                    },
+                    {
+                        id: "d3-5",
+                        time: "17:40 - 18:15",
+                        title: "KTX: 新慶州站 ➔ 釜山站 (回程 17:40)",
+                        category: "transit",
+                        bookingCode: "KTX-SINGYEONGJU-BUSAN-1740",
+                        korean: "신경주역 -> 부산역",
+                        desc: "搭乘 17:40 KTX 返回釜山，順利回飯店休息與準備明天 PASS 行程。",
+                        story: "搭乘 KTX 快捷舒適，省下時間充分休息。"
+                    }
+                ]
+            },
+            {
+                day: 4,
+                date: "10/24",
+                week: "六",
+                title: "海雲台黃金路線【PASS 啟用 Day 1】",
+                weather: { temp: "15°C - 21°C", loc: "海雲台區", desc: "陽光普照・海風徐徐", outfit: "🧢 太陽眼鏡 + 防風外套" },
+                items: [
+                    {
+                        id: "d4-1",
+                        time: "09:30 - 11:00",
+                        title: "09:30 Sky Capsule 膠囊列車 (尾浦 ➔ 青沙浦)",
+                        category: "transit",
+                        bookingCode: "SKY-CAPSULE-1024-0930",
+                        korean: "해운대 블루라인파크 미포승강장",
+                        desc: "預約 09:30 車次！高空懸掛彩色膠囊小火車，全景遠眺高空海景。",
+                        story: "【天空膠囊】釜山爆紅行程！沿著海岸線高架行駛，拍出浪漫無限海景照片。"
+                    },
+                    {
+                        id: "d4-2",
+                        time: "10:00 - 11:00",
+                        title: "青沙浦 (紅白燈塔 & 踏石觀景台)",
+                        category: "attraction",
+                        korean: "청사포 다릿돌전망대",
+                        desc: "漫步青沙浦漁港，拍照經典紅白雙燈塔與踏石海上天空步道。",
+                        story: "踏石觀景台延伸至海面上，地板設有透明玻璃，站在上方宛如漂浮於蔚藍大海。"
+                    },
+                    {
+                        id: "d4-3",
+                        time: "11:15 - 11:45",
+                        title: "11:15 海岸列車 (青沙浦 ➔ 松亭) 【PASS 免費】",
+                        category: "transit",
+                        bookingCode: "PASS 免費兌換 Beach Train 乘車券",
+                        korean: "청사포역 -> 송정역",
+                        desc: "使用 VISIT BUSAN PASS 搭乘復古海岸列車抵達松亭海邊。",
+                        story: "海岸列車座椅全排朝向大海，是欣賞釜山海岸線的愜意視角。"
+                    },
+                    {
+                        id: "d4-4",
+                        time: "12:00 - 13:30",
+                        title: "午餐：松亭 JJ 烤貝 (JJ 조개구이)",
+                        category: "food",
+                        korean: "JJ조개구이",
+                        mustEat: "JJ 炭火烤扇貝, 澎湃海鮮拉麵",
+                        mustOrder: "조개구이 (烤貝套餐) + 海鮮拉麵",
+                        desc: "面對海景享用鮮甜無比的炭火烤貝與香辣海鮮拉麵！",
+                        story: "新鮮扇貝加上起司與奶油在炭火上烤至冒泡，搭配濃郁海鮮麵超滿足。"
+                    },
+                    {
+                        id: "d4-5",
+                        time: "13:40 - 16:30",
+                        title: "Skyline Luge Busan 斜坡滑車 (4次券) 【PASS 免費】",
+                        category: "attraction",
+                        bookingCode: "PASS 免費兌換 Luge 4次搭乘券",
+                        korean: "스카이라인루지 부산",
+                        desc: "位於機張，搭纜車上山體驗 4 次刺激順暢的無動力斜坡自駕滑車！",
+                        story: "操作極為簡單安全，大人小孩都能享受彎道飆速的快感！"
+                    },
+                    {
+                        id: "d4-6",
+                        time: "17:00 - 18:15",
+                        title: "Busan X the Sky 觀景台 (99F) 【PASS 免費】",
+                        category: "attraction",
+                        bookingCode: "PASS 免費兌換 X the Sky 入場券",
+                        korean: "부산 엑스더스카이",
+                        desc: "登頂釜山地標韓國第二高樓，俯瞰海雲台海岸線與美麗夕陽落日。",
+                        story: "館內設有全球最高 Starbucks，坐在窗邊俯瞰海景極具視覺衝擊。"
+                    },
+                    {
+                        id: "d4-7",
+                        time: "18:30",
+                        title: "晚餐：海雲台市場 (五福豬肉湯飯 / 海鮮烤貝)",
+                        category: "food",
+                        korean: "해운대시장 / 오복돼지국밥",
+                        mustEat: "五福豬肉湯飯 (오복돼지국밥), 海鮮烤貝, 海雲台傳統市場辣炒年糕",
+                        desc: "熱騰騰的濃郁豬肉湯飯，搭配韭菜與蝦醬完美暖胃！",
+                        story: "五福豬肉湯飯湯頭呈奶白色，豬肉片厚實嫩口，是海雲台在地熱門老店。"
+                    }
+                ]
+            },
+            {
+                day: 5,
+                date: "10/25",
+                week: "日",
+                title: "西面配眼鏡＋Centum City＋Spa Land【PASS 啟用 Day 2】",
+                weather: { temp: "15°C - 21°C", loc: "西面/ Centum City", desc: "晴朗乾爽・室內行程", outfit: "🧖‍♀️ 方便穿脫休閒服（去 Spa Land 汗蒸幕）" },
+                items: [
+                    {
+                        id: "d5-1",
+                        time: "09:30 - 12:30",
+                        title: "西面【配眼鏡】與地下街/韓潮購物",
+                        category: "special",
+                        korean: "서면 다비치안경 / OWNDAYS / LensMe",
+                        mustGift: "Musinsa Standard, SAPPUN 鞋款, MLB, Butter, Artbox",
+                        desc: "至 Davich / OWNDAYS / LensMe 驗光選框。一般 1-2 小時即可快速取件！順逛 Musinsa 與 SAPPUN。",
+                        story: "【韓國配眼鏡優勢】驗光快速精準，款式極具設計感且鏡片 CP 值高！"
+                    },
+                    {
+                        id: "d5-2",
+                        time: "13:00 - 14:30",
+                        title: "午餐：西面豬肉湯飯名店",
+                        category: "food",
+                        korean: "송정3대국밥 / 신창국밥 / 화목정",
+                        mustEat: "松亭三代豬肉湯飯, 新昌湯飯本店, 華木亭分開湯飯",
+                        desc: "品嚐西面湯飯街最知名的濃郁豬肉湯飯老店。",
+                        story: "松亭三代豬肉湯飯傳承數十年，白湯濃郁不腥，可自由加韭菜與蝦醬調味。"
+                    },
+                    {
+                        id: "d5-3",
+                        time: "15:00 - 18:30",
+                        title: "Centum City 購物 & Spa Land 汗蒸幕【PASS 免費】",
+                        category: "special",
+                        bookingCode: "PASS 免費兌換 Spa Land 4小時體驗",
+                        korean: "신세계백화점 센텀시티점 / 스파랜드",
+                        mustGift: "Matin Kim, EMIS, Pop Mart, 新세계精品",
+                        mustEat: "Spa Land 甜米露 (식혜), 麥飯石烤雞蛋",
+                        desc: "暢逛新世界百貨潮流品牌，隨後進入五星級 Spa Land 汗蒸幕徹底放鬆休息。",
+                        story: "【Spa Land 秘訣】擁有 22 個天然溫泉池與 13 種主題汗蒸房，蒸完全身煥然一新！"
+                    },
+                    {
+                        id: "d5-4",
+                        time: "19:00",
+                        title: "廣安里夜景 & 晚餐 (水邊最高豬肉湯飯)",
+                        category: "food",
+                        korean: "광안리해수욕장 / 수변최고돼지국밥",
+                        mustEat: "水邊最高豬肉湯飯 (수변최고돼지국밥), 海雲台傳統市場魚糕",
+                        desc: "夕陽餘暉下漫步廣安里海灘，欣賞廣安大橋夜景，晚餐享用排隊名店水邊最高豬肉湯飯！",
+                        story: "廣安大橋夜晚燈光秀極具浪漫氛圍，水邊最高豬肉湯飯更是無數饕客心中第一名！"
+                    }
+                ]
+            },
+            {
+                day: 6,
+                date: "10/26",
+                week: "一",
+                title: "海雲台室內購物 ➔ 【醫美：워너비의원 海雲台】",
+                weather: { temp: "14°C - 21°C", loc: "海雲台區", desc: "紫外線防護日", outfit: "🧢 寬簷防曬帽 / 防曬衣物 / 避開強光" },
+                items: [
+                    {
+                        id: "d6-1",
+                        time: "09:30 - 12:00",
+                        title: "Centum City / 海雲台室內購物 (或取眼鏡)",
+                        category: "special",
+                        korean: "신세계백화점 / 롯데백화점",
+                        mustGift: "Pop Mart 盲盒, Olive Young 美妝保養, 免稅店精品",
+                        desc: "前往 Centum City 百貨、Pop Mart 與 Olive Young 輕鬆採買，或前往西面領取配好的眼鏡。",
+                        story: "全程位於室內百貨，不受戶外天氣與紫外線影響。"
+                    },
+                    {
+                        id: "d6-2",
+                        time: "12:00 - 13:00",
+                        title: "午餐：海雲台附近享用 (參雞湯/牛肉湯)",
+                        category: "food",
+                        korean: "해운대 삼계탕",
+                        mustEat: "海雲台參雞湯, 元祖牛肉湯飯",
+                        desc: "溫補養生午餐，為午後療程補充充足體力。",
+                        story: "參雞湯以鮮嫩幼雞包覆糯米與人參燉煮，滋補溫和。"
+                    },
+                    {
+                        id: "d6-3",
+                        time: "14:00 - 18:00",
+                        title: "【워너비의원 부산 해운대 (Wannabe Clinic)】",
+                        category: "special",
+                        bookingCode: "WNB-20261026-1400",
+                        korean: "워너비의원 부산해운대점",
+                        desc: "進行專業醫美諮詢與療程 (固定預約 14:00)。",
+                        story: "⚠️ <strong>術後重要注意事項：</strong> 避免紫外線曝曬、避免海風強吹、避免流汗與酒精、避免長時間戶外步行！"
+                    },
+                    {
+                        id: "d6-4",
+                        time: "18:00 以後",
+                        title: "室內晚餐 & 飯店打包整理",
+                        category: "food",
+                        korean: "해운대 실내식당",
+                        desc: "療程結束後【全程避開室外與紫外線】，直接於百貨或室內餐廳享用溫和粥品或湯飯，回飯店休息打包。",
+                        story: "醫美療程後肌膚脆弱，室內用餐並提早回飯店休息最適宜。"
+                    }
+                ]
+            },
+            {
+                day: 7,
+                date: "10/27",
+                week: "二",
+                title: "整理行囊・返抵家門",
+                weather: { temp: "15°C - 20°C", loc: "金海機場", desc: "全程室內接駁", outfit: "✈️ 舒適便服 + 防曬帽" },
+                items: [
+                    {
+                        id: "d7-1",
+                        time: "07:30 - 08:30",
+                        title: "起床與飯店 Check-out",
+                        category: "transit",
+                        korean: "호텔 체크아웃",
+                        desc: "辦理退房手續，檢查是否帶齊眼鏡、醫美藥品與戰利品。",
+                        story: "順利結束充實美好的釜山慶州 7 日之旅！"
+                    },
+                    {
+                        id: "d7-2",
+                        time: "08:45 - 09:30",
+                        title: "直達計程車/包車接送至金海機場",
+                        category: "transit",
+                        korean: "김해국제공항",
+                        desc: "全程搭乘計程車直達機場航廈門口 (約 25-30 分鐘)，避免戶外走動與曝曬。",
+                        story: "中央站至機場計程車車資約 ₩18,000 - ₩22,000，省時又輕鬆。"
+                    },
+                    {
+                        id: "d7-3",
+                        time: "09:50 - 11:50",
+                        title: "抵達金海機場・辦理 Check-in 與退稅",
+                        category: "transit",
+                        korean: "김해공항 출국장",
+                        desc: "辦理行李託運與 Tax Refund 自動退稅手續（全程室內）。",
+                        story: "金海機場退稅機台支援繁體中文介面，掃描護照即可快速操作。"
+                    },
+                    {
+                        id: "d7-4",
+                        time: "11:50 ➔ 13:30",
+                        title: "航班起飛・抵達台灣桃園國際機場",
+                        category: "transit",
+                        korean: "타오위안 국제공항",
+                        desc: "11:50 金海機場起飛，13:30 順利抵達桃園機場。",
+                        story: "滿載收穫與回憶，期待下次韓國漫遊之旅！"
+                    }
+                ]
+            }
+        ];
+
+        let expenses = [
+            { title: "VISIT BUSAN PASS 48h x2", amount: 170000, date: "預約" },
+            { title: "KTX 慶州來回票 x2", amount: 60000, date: "預約" },
+            { title: "Sky Capsule 膠囊列車", amount: 40000, date: "預約" },
+            { title: "堅果黑糖餅 x2", amount: 4000, date: "10/21" },
+            { title: "皇理團路 10 韓元餅", amount: 3500, date: "10/22" }
+        ];
+
+        let currentDay = 1;
+        let currentCategory = 'all';
+        let checkedState = JSON.parse(localStorage.getItem('busan_checked_items') || '{}');
+
+        window.onload = function() {
+            renderDayTabs();
+            renderCurrentDay();
+            renderTransitCards();
+            renderGuidePage();
+            renderExpenses();
+        };
+
+        function renderDayTabs() {
+            const tabsContainer = document.getElementById('day-tabs');
+            tabsContainer.innerHTML = '';
+
+            itineraryData.forEach(d => {
+                const isActive = d.day === currentDay;
+                const btn = document.createElement('button');
+                btn.className = `sketch-btn px-3 py-1.5 text-xs font-bold shrink-0 transition-all ${
+                    isActive 
+                    ? 'bg-yellow-300 text-stone-900 translate-y-[-2px] shadow-md border-2 border-stone-800' 
+                    : 'bg-white text-stone-700 hover:bg-amber-50'
+                }`;
+                btn.onclick = () => selectDay(d.day);
+                btn.innerHTML = `
+                    <div class="text-[10px] opacity-80">Day ${d.day} (${d.date})</div>
+                    <div>${d.title.split('・')[0]}</div>
+                `;
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function selectDay(dayNum) {
+            currentDay = dayNum;
+            renderDayTabs();
+            renderCurrentDay();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderCurrentDay() {
+            const dayData = itineraryData.find(d => d.day === currentDay);
+            if (!dayData) return;
+
+            document.getElementById('weather-temp').innerText = dayData.weather.temp;
+            document.getElementById('weather-loc').innerText = dayData.weather.loc;
+            document.getElementById('weather-desc').innerText = dayData.weather.desc;
+            document.getElementById('weather-outfit').innerHTML = `🧥 <strong>穿搭建議：</strong> ${dayData.weather.outfit}`;
+
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = '';
+
+            let filteredItems = dayData.items;
+            if (currentCategory !== 'all') {
+                filteredItems = filteredItems.filter(item => item.category === currentCategory);
+            }
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = `
+                    <div class="sketch-box p-6 text-center text-stone-500 font-doodle bg-white">
+                        <i class="fa-solid fa-compass-drafting text-3xl mb-2 text-amber-400"></i>
+                        <p class="text-sm">這個分類今天沒有安排行程喔～</p>
+                    </div>
+                `;
+            } else {
+                filteredItems.forEach(item => {
+                    const isChecked = checkedState[item.id] || false;
+                    const card = createItemCard(item, isChecked);
+                    container.appendChild(card);
+                });
+            }
+
+            updateProgressBar(dayData.items);
+        }
+
+        function createItemCard(item, isChecked) {
+            const card = document.createElement('div');
+            card.className = `sketch-box p-3.5 relative transition-all ${
+                isChecked ? 'bg-stone-100/80 opacity-75' : 'bg-white'
+            }`;
+
+            const categoryMap = {
+                attraction: { label: '📍 景點', bg: 'bg-sky-100 text-sky-900' },
+                food: { label: '🍎 美食', bg: 'bg-pink-100 text-pink-900' },
+                transit: { label: '🚗 交通', bg: 'bg-amber-100 text-amber-900' },
+                special: { label: '🔑 預約/醫美', bg: 'bg-emerald-100 text-emerald-900' }
+            };
+            const cat = categoryMap[item.category] || categoryMap.attraction;
+
+            // Naver Map 導航搜尋網址
+            const naverMapUrl = `https://map.naver.com/p/search/${encodeURIComponent(item.korean || item.title)}`;
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between gap-2 mb-2 border-b border-dashed border-stone-300 pb-2">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" onchange="toggleCheck('${item.id}')" ${isChecked ? 'checked' : ''} 
+                            class="w-5 h-5 accent-yellow-400 cursor-pointer rounded border-2 border-stone-800">
+                        <span class="text-xs font-black font-doodle bg-stone-800 text-white px-2 py-0.5 rounded">
+                            ${item.time}
+                        </span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded sketch-pill ${cat.bg}">
+                            ${cat.label}
+                        </span>
+                    </div>
+                    <button onclick="copyToClipboard('${item.korean || item.title}')" class="text-[10px] font-bold text-stone-600 hover:text-stone-900 bg-stone-100 px-2 py-0.5 rounded border border-stone-300">
+                        📋 複製韓文
+                    </button>
+                </div>
+
+                <h3 class="text-base font-black text-stone-900 mb-1 ${isChecked ? 'line-through text-stone-500' : ''}">
+                    ${item.title}
+                </h3>
+
+                <p class="text-xs text-stone-600 mb-2 leading-relaxed">
+                    ${item.desc}
+                </p>
+
+                <div class="flex flex-wrap gap-1.5 mb-2.5">
+                    ${item.mustEat ? `<span class="tag-food text-[11px] font-bold px-2 py-0.5 rounded text-pink-950">🍎 必吃: ${item.mustEat}</span>` : ''}
+                    ${item.mustOrder ? `<span class="tag-menu text-[11px] font-bold px-2 py-0.5 rounded text-orange-950">📜 必點: ${item.mustOrder}</span>` : ''}
+                    ${item.mustGift ? `<span class="tag-gift text-[11px] font-bold px-2 py-0.5 rounded text-purple-950">🎁 伴手禮: ${item.mustGift}</span>` : ''}
+                    ${item.bookingCode ? `<span class="tag-booking text-[11px] font-bold px-2 py-0.5 rounded text-emerald-950">🔑 預約: <strong>${item.bookingCode}</strong></span>` : ''}
+                </div>
+
+                <div class="flex justify-between items-center pt-1">
+                    <a href="${naverMapUrl}" target="_blank" class="sketch-btn px-2.5 py-1 bg-emerald-300 text-emerald-950 text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-map-location-dot text-[10px]"></i> Naver 導航
+                    </a>
+                    
+                    ${item.story ? `
+                        <button onclick="openStoryModal('${item.title}', '${encodeURIComponent(item.story)}', '${item.category}')" 
+                            class="sketch-btn px-2.5 py-1 bg-yellow-200 text-stone-900 text-xs font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-lightbulb text-[10px]"></i> 導遊故事&攻略
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+
+            return card;
+        }
+
+        function toggleCheck(itemId) {
+            checkedState[itemId] = !checkedState[itemId];
+            localStorage.setItem('busan_checked_items', JSON.stringify(checkedState));
+            renderCurrentDay();
+        }
+
+        function updateProgressBar(dayItems) {
+            if (!dayItems || dayItems.length === 0) return;
+            const completed = dayItems.filter(i => checkedState[i.id]).length;
+            const total = dayItems.length;
+            const percentage = Math.round((completed / total) * 100);
+
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').innerText = `${completed}/${total}`;
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-stone-800', 'text-white');
+                btn.classList.add('bg-white', 'text-stone-800');
+            });
+            event.target.classList.remove('bg-white', 'text-stone-800');
+            event.target.classList.add('bg-stone-800', 'text-white');
+
+            renderCurrentDay();
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast(`已複製韓文：${text}`);
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-stone-900 text-yellow-300 text-xs font-bold px-4 py-2 sketch-box z-50 shadow-xl';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function switchTab(tabName) {
+            document.querySelector('main').classList.add('hidden');
+            document.getElementById('view-transit').classList.add('hidden');
+            document.getElementById('view-guide').classList.add('hidden');
+            document.getElementById('view-notes').classList.add('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-stone-900');
+                btn.classList.add('text-stone-500');
+                btn.querySelector('div').classList.remove('bg-yellow-200');
+                btn.querySelector('div').classList.add('bg-stone-100');
+            });
+
+            const activeNavBtn = document.getElementById(`nav-${tabName}`);
+            activeNavBtn.classList.remove('text-stone-500');
+            activeNavBtn.classList.add('text-stone-900');
+            activeNavBtn.querySelector('div').classList.remove('bg-stone-100');
+            activeNavBtn.querySelector('div').classList.add('bg-yellow-200');
+
+            if (tabName === 'itinerary') {
+                document.querySelector('main').classList.remove('hidden');
+            } else if (tabName === 'transit') {
+                document.getElementById('view-transit').classList.remove('hidden');
+            } else if (tabName === 'guide') {
+                document.getElementById('view-guide').classList.remove('hidden');
+            } else if (tabName === 'notes') {
+                document.getElementById('view-notes').classList.remove('hidden');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderTransitCards() {
+            const list = document.getElementById('transit-cards-list');
+            const transitSpots = [
+                { title: "中央站住宿飯店", kr: "부산 중구 중앙동4가 74-9", note: "Busan Central Hotel Address" },
+                { title: "釜山金海國際機場", kr: "김해국제공항 (부산 강서구 공항진입로 108)", note: "PUS Airport Entrance" },
+                { title: "釜山火車站 (KTX)", kr: "부산역 (동구 중앙대로 206)", note: "Busan KTX Station" },
+                { title: "慶州佛國寺", kr: "불국사 (경주시 불국로 385)", note: "Bulguksa Temple Gyeongju" },
+                { title: "海雲台藍線公園 (尾浦站)", kr: "해운대 블루라인파크 미포승강장", note: "Mipo Capsule Train" },
+                { title: "Skyline Luge 釜山斜坡滑車", kr: "스카이라인루지 부산 (기장)", note: "Luge Busan Kijang" },
+                { title: "Wannabe Clinic 海雲台店", kr: "워너비의원 부산해운대점", note: "Medical Clinic Haeundae" }
+            ];
+
+            list.innerHTML = '';
+            transitSpots.forEach(s => {
+                const box = document.createElement('div');
+                box.className = 'sketch-box p-3 bg-white';
+                box.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="font-bold text-sm text-stone-900">${s.title}</span>
+                        <span class="text-[10px] bg-amber-100 px-1.5 py-0.5 rounded font-mono text-stone-700">${s.note}</span>
+                    </div>
+                    <div class="bg-amber-50 p-2 rounded border border-stone-800 my-2 text-center">
+                        <div class="text-base font-black text-stone-900 select-all">${s.kr}</div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <a href="https://map.naver.com/p/search/${encodeURIComponent(s.kr)}" target="_blank" class="sketch-btn px-2.5 py-1 bg-emerald-300 text-emerald-950 text-xs font-bold flex items-center gap-1">
+                            🗺️ Naver 導航
+                        </a>
+                        <button onclick="copyToClipboard('${s.kr}')" class="sketch-btn px-2.5 py-1 bg-yellow-300 text-xs font-bold">
+                            📋 複製韓文
+                        </button>
+                    </div>
+                `;
+                list.appendChild(box);
+            });
+        }
+
+        function renderGuidePage() {
+            const foodList = document.getElementById('guide-food-list');
+            const giftList = document.getElementById('guide-gift-list');
+            const bookingList = document.getElementById('guide-booking-list');
+
+            let foods = [
+                "<strong>[南浦洞]</strong> BIFF 種子糖餅 (씨앗호떡), 參兵豬肉湯飯 (참병국밥), 草梁本家小麥冷麵, 螞蟻家章魚肥腸鍋 (낙곱새)",
+                "<strong>[慶州]</strong> 慶州優質韓牛燒肉, 傳統韓定食套餐, 10 韓元起司餅",
+                "<strong>[海雲台]</strong> 松亭 JJ 烤貝 (JJ 조개구이), 五福豬肉湯飯 (오복돼지국밥), 海雲台傳統市場魚糕",
+                "<strong>[西面]</strong> 松亭三代豬肉湯飯, 新昌湯飯本店, 華木亭分開湯飯",
+                "<strong>[廣安里/Centum]</strong> 水邊最高豬肉湯飯 (수변최고돼지국밥), Spa Land 甜米露與烤蛋"
+            ];
+
+            let gifts = [
+                "<strong>[南浦洞]</strong> 樂天超市 (海苔/蜂蜜奶油杏仁果/魚板禮盒), BIFF 文創商品, 大創, Olive Young",
+                "<strong>[西面]</strong> Musinsa Standard, SAPPUN 鞋款, MLB, Butter, Artbox, 眼鏡配件",
+                "<strong>[Centum City]</strong> Matin Kim, EMIS, Pop Mart 盲盒, Shinsegae 精品"
+            ];
+
+            let bookings = [
+                "<strong>[10/23]</strong> KTX 慶州往返: 08:00 去程 / 17:40 回程",
+                "<strong>[10/24 09:30]</strong> Sky Capsule 膠囊列車 (尾浦 ➔ 青沙浦)",
+                "<strong>[10/24 11:15]</strong> 海岸列車 (青沙浦 ➔ 松亭) <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/24 13:40]</strong> Skyline Luge 斜坡滑車 4次券 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/24 17:00]</strong> Busan X the Sky 觀景台 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/25]</strong> Spa Land 汗蒸幕 4小時體驗 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/26 14:00]</strong> 워너비의원 海雲台店 (Wannabe Clinic 醫美行程)"
+            ];
+
+            foodList.innerHTML = foods.map(f => `<li class="border-b border-pink-200 pb-1.5">${f}</li>`).join('');
+            giftList.innerHTML = gifts.map(g => `<li class="border-b border-purple-200 pb-1.5">${g}</li>`).join('');
+            bookingList.innerHTML = bookings.map(b => `<li class="border-b border-amber-200 pb-1.5">${b}</li>`).join('');
+        }
+
+        function renderExpenses() {
+            const list = document.getElementById('expense-list');
+            list.innerHTML = '';
+
+            let totalKRW = 0;
+
+            expenses.forEach((exp, idx) => {
+                totalKRW += Number(exp.amount);
+                const item = document.createElement('div');
+                item.className = 'sketch-box p-2.5 bg-white flex justify-between items-center text-xs';
+                item.innerHTML = `
+                    <div>
+                        <div class="font-bold text-stone-900">${exp.title}</div>
+                        <div class="text-[10px] text-stone-500">${exp.date || '記錄'}</div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-black text-stone-900 text-sm">₩ ${Number(exp.amount).toLocaleString()}</span>
+                        <button onclick="deleteExpense(${idx})" class="text-stone-400 hover:text-red-500 font-bold">✕</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            document.getElementById('total-expense-krw').innerText = `₩ ${totalKRW.toLocaleString()}`;
+            document.getElementById('total-expense-twd').innerText = `NT$ ${Math.round(totalKRW / 42).toLocaleString()}`;
+        }
+
+        function handleAddExpense(e) {
+            e.preventDefault();
+            const title = document.getElementById('exp-title').value;
+            const amount = document.getElementById('exp-amount').value;
+            const currentDayData = itineraryData.find(d => d.day === currentDay);
+
+            expenses.push({
+                title,
+                amount: Number(amount),
+                date: `${currentDayData.date}`
+            });
+
+            document.getElementById('exp-title').value = '';
+            document.getElementById('exp-amount').value = '';
+
+            closeModal('modal-expense');
+            renderExpenses();
+            showToast('已新增記帳項目！');
+        }
+
+        function deleteExpense(idx) {
+            expenses.splice(idx, 1);
+            renderExpenses();
+        }
+
+        function openStoryModal(title, encodedStory, cat) {
+            document.getElementById('story-title').innerText = title;
+            document.getElementById('story-content').innerText = decodeURIComponent(encodedStory);
+            document.getElementById('modal-story').classList.remove('hidden');
+        }
+
+        function openInfoModal() {
+            document.getElementById('modal-info').classList.remove('hidden');
+        }
+
+        function openAddModal() {
+            document.getElementById('modal-add').classList.remove('hidden');
+        }
+
+        function openAddExpenseModal() {
+            document.getElementById('modal-expense').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function handleAddItem(e) {
+            e.preventDefault();
+            const time = document.getElementById('add-time').value;
+            const title = document.getElementById('add-title').value;
+            const category = document.getElementById('add-category').value;
+            const desc = document.getElementById('add-desc').value;
+
+            const dayObj = itineraryData.find(d => d.day === currentDay);
+            if (dayObj) {
+                dayObj.items.push({
+                    id: `custom-${Date.now()}`,
+                    time,
+                    title,
+                    category,
+                    desc,
+                    korean: title
+                });
+                renderCurrentDay();
+                closeModal('modal-add');
+                showToast('已新增行程項目！');
+            }
+        }
+    </script>
+</body>
+</html>

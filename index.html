@@ -6,7 +6,7 @@
     <title>釜山＆慶州 7日秋季漫遊小工具</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Patrick+Hand&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -213,7 +213,7 @@
         <div class="sketch-box p-3 mb-4 bg-sky-50">
             <h3 class="font-bold text-sm text-stone-900 mb-1">💡 Naver Map 導航與計程車貼士</h3>
             <p class="text-xs text-stone-700 leading-relaxed">
-                釜山與慶州自駕時，推薦搭配 <strong>Naver Map (네이버 지도)</strong>！點擊每個地點下的「🗺️ Naver 導航」即可直接調起導航，亦可點選複製地址出示給計程車司機。
+                釜山與慶州推薦使用 <strong>Naver Map (네이버 지도)</strong>！點擊「🗺️ Naver 導航」可直接調起導航，亦可點選「📋 複製韓文」出示給計程車司機。
             </p>
         </div>
 
@@ -224,32 +224,69 @@
 
     <!-- 導遊懶人包 View -->
     <div id="view-guide" class="hidden px-4 pt-3 pb-24">
-        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">📖 全行程必吃必買 & 故事總整理</h2>
+        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">📖 全行程必吃必買、預約 & 預算總整理</h2>
         
         <div class="space-y-4">
+            <!-- VISIT BUSAN PASS 48h 專區與省錢計算 -->
+            <div class="sketch-box p-3 bg-emerald-50 border-2 border-emerald-600">
+                <h3 class="font-bold text-sm text-emerald-900 mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-ticket text-emerald-600"></i> 🎟️ VISIT BUSAN PASS 48h 涵蓋景點一覽 (回本率破200%)
+                </h3>
+                <div class="text-[11px] space-y-1.5 text-stone-800 font-medium leading-relaxed">
+                    <p class="text-emerald-800 font-bold">✨ 票價 ₩85,000 / 人，以下皆可免費暢玩（總價值超過 ₩145,000）：</p>
+                    <div class="bg-white p-2 rounded border border-emerald-300 space-y-1">
+                        <div>🎢 <strong>釜山樂天世界</strong>：門票全免 (省 ₩47,000)</div>
+                        <div>🏎️ <strong>Skyline Luge 釜山</strong>：免費兌換 4 次滑車票 (省 ₩27,000)</div>
+                        <div>🏙️ <strong>Busan X the Sky (99F)</strong>：觀景台免費入場 (省 ₩27,000)</div>
+                        <div>🧖‍♀️ <strong>Spa Land 汗蒸幕</strong>：免費享受 4 小時高級設施 (省 ₩20,000)</div>
+                        <div>🏃‍♂️ <strong>Running Man 釜山體驗館</strong>：闖關遊戲免費入場 (省 ₩16,000)</div>
+                        <div>🚋 <strong>海雲台海岸列車</strong>：憑 PASS 免費搭乘 (省 ₩12,000)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 重要預約清單 -->
+            <div class="sketch-box p-3 bg-yellow-50 border-2 border-amber-600">
+                <h3 class="font-bold text-sm text-amber-900 mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-check text-amber-600"></i> 📅 行程預約與時間彙整
+                </h3>
+                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-booking-list">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+
+            <!-- 雙人預算估算卡 -->
+            <div class="sketch-box p-3 bg-blue-50">
+                <h3 class="font-bold text-sm text-blue-900 mb-2 flex items-center justify-between">
+                    <span>💰 2 人預算預估 (不含住宿/購物/醫美)</span>
+                    <span class="text-xs bg-blue-200 text-blue-900 px-2 py-0.5 rounded font-bold font-mono">約 NT$ 12.6k - 16.6k</span>
+                </h3>
+                <div class="grid grid-cols-2 gap-1.5 text-[11px] text-stone-700 font-medium">
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🎟️ VISIT BUSAN PASS 48h: <strong>₩170,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚄 KTX 慶州來回: <strong>₩60,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚃 Sky Capsule: <strong>₩40,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🚇 計程車與地鐵: <strong>₩30,000</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">👓 配眼鏡預算: <strong>₩120k-300k</strong></div>
+                    <div class="bg-white p-1.5 rounded border border-stone-300">🍖 雙人餐飲預算: <strong>₩250k-350k</strong></div>
+                </div>
+            </div>
+
+            <!-- 必吃美食 -->
             <div class="sketch-box p-3 bg-pink-50">
                 <h3 class="font-bold text-sm text-pink-900 mb-2 flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 🍎 必吃美食懶人包
+                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 🍎 必吃美食地圖總整理 (非海鮮)
                 </h3>
                 <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-food-list">
                     <!-- Dynamic -->
                 </ul>
             </div>
 
+            <!-- 必買清單 -->
             <div class="sketch-box p-3 bg-purple-50">
                 <h3 class="font-bold text-sm text-purple-900 mb-2 flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-purple-400 inline-block"></span> 🎁 必買伴手禮清單
+                    <span class="w-3 h-3 rounded-full bg-purple-400 inline-block"></span> 🎁 必買購物清單 (南浦/機張Outlet/西面/Centum)
                 </h3>
                 <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-gift-list">
-                    <!-- Dynamic -->
-                </ul>
-            </div>
-
-            <div class="sketch-box p-3 bg-emerald-50">
-                <h3 class="font-bold text-sm text-emerald-900 mb-2 flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> 🔑 重要預約與醫美提醒
-                </h3>
-                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-booking-list">
                     <!-- Dynamic -->
                 </ul>
             </div>
@@ -281,59 +318,6 @@
         </div>
     </div>
 
-    <!-- 導遊懶人包 View -->
-    <div id="view-guide" class="hidden px-4 pt-3 pb-24">
-        <h2 class="text-lg font-black mb-3 text-stone-900 border-b-2 border-stone-800 pb-1">📖 全行程必吃必買、預約 & 預算總整理</h2>
-        
-        <div class="space-y-4">
-            <!-- VISIT BUSAN PASS 48h & 票券預約 -->
-            <div class="sketch-box p-3 bg-yellow-50 border-2 border-amber-600">
-                <h3 class="font-bold text-sm text-amber-900 mb-2 flex items-center gap-1.5">
-                    <i class="fa-solid fa-ticket text-amber-600"></i> 🎟️ VISIT BUSAN PASS 48h & 票券預約
-                </h3>
-                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-booking-list">
-                    <!-- Dynamic -->
-                </ul>
-            </div>
-
-            <!-- 雙人預算估算卡 -->
-            <div class="sketch-box p-3 bg-blue-50">
-                <h3 class="font-bold text-sm text-blue-900 mb-2 flex items-center justify-between">
-                    <span>💰 2 人預算預估 (不含住宿/購物/醫美)</span>
-                    <span class="text-xs bg-blue-200 text-blue-900 px-2 py-0.5 rounded font-bold font-mono">約 NT$ 12.5k - 16.5k</span>
-                </h3>
-                <div class="grid grid-cols-2 gap-1.5 text-[11px] text-stone-700 font-medium">
-                    <div class="bg-white p-1.5 rounded border border-stone-300">🎟️ VISIT BUSAN PASS 48h: <strong>₩170,000</strong></div>
-                    <div class="bg-white p-1.5 rounded border border-stone-300">🚄 KTX 慶州來回: <strong>₩60,000</strong></div>
-                    <div class="bg-white p-1.5 rounded border border-stone-300">🚃 Sky Capsule: <strong>₩40,000</strong></div>
-                    <div class="bg-white p-1.5 rounded border border-stone-300">🚇 地鐵交通估算: <strong>₩25,000</strong></div>
-                    <div class="bg-white p-1.5 rounded border border-stone-300">👓 配眼鏡預算: <strong>₩120k-300k</strong></div>
-                    <div class="bg-white p-1.5 rounded border border-stone-300">🍖 雙人餐飲預算: <strong>₩250k-350k</strong></div>
-                </div>
-            </div>
-
-            <!-- 必吃美食 -->
-            <div class="sketch-box p-3 bg-pink-50">
-                <h3 class="font-bold text-sm text-pink-900 mb-2 flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 🍎 必吃美食地圖總整理
-                </h3>
-                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-food-list">
-                    <!-- Dynamic -->
-                </ul>
-            </div>
-
-            <!-- 必買清單 -->
-            <div class="sketch-box p-3 bg-purple-50">
-                <h3 class="font-bold text-sm text-purple-900 mb-2 flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-purple-400 inline-block"></span> 🎁 必買購物清單 (南浦/西面/Centum)
-                </h3>
-                <ul class="text-xs space-y-1.5 text-stone-800 font-medium" id="guide-gift-list">
-                    <!-- Dynamic -->
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <!-- 飯店與緊急資訊 Modal -->
     <div id="modal-info" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
         <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
@@ -354,7 +338,7 @@
         </div>
     </div>
 
-    <!-- 3. 新增/編輯行程卡片 Modal -->
+    <!-- 新增/編輯行程卡片 Modal -->
     <div id="modal-add" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
         <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
             <button onclick="closeModal('modal-add')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
@@ -390,7 +374,7 @@
         </div>
     </div>
 
-    <!-- 4. 新增記帳 Modal -->
+    <!-- 新增記帳 Modal -->
     <div id="modal-expense" class="fixed inset-0 z-50 modal-bg flex items-center justify-center p-4 hidden">
         <div class="sketch-box bg-white w-full max-w-sm p-4 relative">
             <button onclick="closeModal('modal-expense')" class="absolute top-3 right-3 sketch-circle w-8 h-8 bg-stone-100 flex items-center justify-center font-bold">✕</button>
@@ -502,7 +486,7 @@
                         time: "13:10 - 13:50",
                         title: "釜山電影體驗博物館 (Busan Museum of Movies)",
                         category: "attraction",
-                        bookingCode: "PASS 免費入場",
+                        bookingCode: "PASS 可用設施",
                         korean: "부산영화체험박물관",
                         desc: "體驗韓國首座電影主題體驗館，互動體驗綠幕合成、配音與電影特效。",
                         story: "【PASS 優惠】憑 VISIT BUSAN PASS 可免費入場體驗，深刻感受釜山作為亞洲電影之都的魅力！"
@@ -629,42 +613,52 @@
                 day: 4,
                 date: "10/24",
                 week: "六",
-                title: "海雲台與廣安里",
-                weather: { temp: "15°C - 21°C", loc: "海雲台區/機張", desc: "陽光普照・海風徐徐", outfit: "🧢 太陽眼鏡 + 防風外套" },
+                title: "樂天Outlet與海雲台",
+                weather: { temp: "15°C - 21°C", loc: "海雲台/機張奧西利亞", desc: "陽光普照・海風徐徐", outfit: "🧢 太陽眼鏡 + 防風外套 + 舒適好走的鞋" },
                 items: [
                     {
                         id: "d4-0",
                         time: "08:30 - 09:20",
-                        title: "從飯店出發 ➔ Skyline Luge 釜山斜坡滑車",
+                        title: "從飯店出發 ➔ 機張奧西利亞 (Skyline Luge 釜山)",
                         category: "transit",
                         korean: "스카이라인루지 부산",
-                        desc: "從中央站飯店搭乘計程車（車程約 40-50 分鐘）直達機張 Skyline Luge 滑車場。",
-                        story: "早晨建議直接搭乘計程車前往機張，能大幅節省地鐵與公車轉乘的時間壓力！"
+                        desc: "從中央站飯店搭乘計程車直達機張奧西利亞園區（車程約 40-50 分鐘），省去換車勞頓。",
+                        story: "早晨搭計程車直接抵達機張，能趁早晨人潮最少時暢玩樂園！"
                     },
                     {
                         id: "d4-1",
-                        time: "09:30 - 11:30",
+                        time: "09:30 - 10:45",
                         title: "Skyline Luge Busan 斜坡滑車 (4次券) 【PASS 免費】",
                         category: "attraction",
-                        bookingCode: "PASS 免費兌換 Luge 4次搭乘券",
+                        bookingCode: "PASS 免費兌換 Luge 4次搭乘券 (原價₩27,000)",
                         korean: "스카이라인루지 부산",
                         desc: "位於機張，早上搭纜車上山體驗 4 次刺激順暢的無動力斜坡自駕滑車！",
                         story: "【PASS 推薦】操作極為簡單安全，早晨避開人潮暢快體驗飆速樂趣！"
                     },
                     {
                         id: "d4-2",
-                        time: "12:00 - 13:15",
-                        title: "午餐：海雲台 伍班長炭火烤肉 (오반장)",
-                        category: "food",
-                        korean: "오반장",
-                        mustEat: "伍班長炭火烤五花肉、霜降牛排骨",
-                        mustOrder: "삼겹살 (五花肉) + 계란구이 (烤邊蒸蛋)",
-                        desc: "在海雲台極具人氣的傳統炭火燒肉老店享用香氣四溢的炭烤豬五花與牛排骨，特製烤盤邊緣還會倒入金黃蒸蛋！",
-                        story: "【伍班長烤肉】海雲台地標級傳統炭火烤肉，邊緣圍欄烤蒸蛋與厚切豬五花深受在地人與遊客喜愛。"
+                        time: "10:45 - 12:15",
+                        title: "釜山樂天世界冒險樂園 (Lotte World Busan) 【PASS 免費】",
+                        category: "attraction",
+                        bookingCode: "PASS 免費換全日通票 (原價₩47,000)",
+                        korean: "롯데월드 어드벤처 부산 (기장)",
+                        desc: "緊鄰 Luge 步行 3 分鐘！憑 PASS 免費入場，打卡壯觀夢幻的洛麗城堡 (Lorry Castle)，體驗巨型雲霄飛車或旋轉木馬。",
+                        story: "【PASS 必刷大景點】門票原價高達 ₩47,000，光憑 PASS 玩樂天世界就已經回本過半！園區拍照極具歐風童話感。"
                     },
                     {
                         id: "d4-3",
-                        time: "13:30 - 16:30",
+                        time: "12:15 - 13:45",
+                        title: "樂天 Premium Outlets 東釜山店 (購物 & 午餐)",
+                        category: "food",
+                        korean: "롯데프리미엄아울렛 동부산점",
+                        mustEat: "Outlet 美食街溫和定食、石鍋拌飯",
+                        mustGift: "運動品牌、韓系服裝、現場即時退稅",
+                        desc: "位於樂天世界正對面！全亞洲最大規模希臘聖托里尼風格 Outlet，採買品牌折扣服飾並在美食街享用午餐。",
+                        story: "【東釜山 Outlet】商場空間超寬敞好逛，運動品牌與專櫃常有誘人折扣，而且現場即可辦理即時退稅！"
+                    },
+                    {
+                        id: "d4-4",
+                        time: "14:00 - 16:30",
                         title: "海雲台藍線公園 (天空膠囊 & 海岸列車)",
                         category: "transit",
                         bookingCode: "SKY-CAPSULE-1024 / PASS 免費海岸列車",
@@ -673,23 +667,23 @@
                         story: "釜山爆紅海岸美景！沿著海岸線高架行駛，拍出浪漫無限海景照片。"
                     },
                     {
-                        id: "d4-4",
+                        id: "d4-5",
                         time: "17:00 - 18:30",
                         title: "Busan X the Sky 觀景台 (99F) 【PASS 免費】",
                         category: "attraction",
-                        bookingCode: "PASS 免費兌換 X the Sky 入場券",
+                        bookingCode: "PASS 免費兌換 X the Sky 入場券 (原價₩27,000)",
                         korean: "부산 엑스더스카이",
                         desc: "登頂釜山地標韓國第二高樓，俯瞰海雲台海岸線與美麗夕陽落日。",
                         story: "館內設有全球最高 Starbucks，坐在窗邊俯瞰海景極具視覺衝擊。"
                     },
                     {
-                        id: "d4-5",
+                        id: "d4-6",
                         time: "19:00 - 20:30",
-                        title: "晚餐 ➔ 廣安里海水浴場【廣安里 M 航展無人機燈光秀】",
+                        title: "廣安里 彥陽烤牛肉 / 伍班長 ➔【廣安里 M 航展無人機燈光秀】",
                         category: "attraction",
-                        korean: "광안리해수욕장 / 수변최고돼지국밥",
-                        mustEat: "五福豬肉湯飯, 廣安里 彥陽烤牛肉, 水邊最高豬肉湯飯",
-                        desc: "每週週六晚間限定！於廣安里沙灘欣賞數百架無人機夜空燈光秀（常態 20:00），搭配廣安大橋夜景與美味韓式烤牛肉或豬肉湯飯！",
+                        korean: "광안리해수욕장 / 언양불고기",
+                        mustEat: "廣安里 彥陽烤牛肉, 海雲台 伍班長烤肉, 五福豬肉湯飯",
+                        desc: "每週六晚間限定 (20:00)！在廣安里沙灘欣賞數百架無人機夜空燈光秀，搭配廣安大橋夜景與美味韓式烤肉！",
                         story: "【每週六限定亮點】廣安里無人機秀是釜山週六夜晚最絢麗的代表性表演，科技與海港夜景完美結合！"
                     }
                 ]
@@ -715,7 +709,7 @@
                         time: "09:30 - 12:00",
                         title: "Running Man 釜山體驗館 【PASS 免費】 & 西面配眼鏡",
                         category: "special",
-                        bookingCode: "PASS 免費體驗 Running Man 門票",
+                        bookingCode: "PASS 免費體驗 Running Man 門票 (原價₩16,000)",
                         korean: "런닝맨 부산점 (서면 삼정타워 10층)",
                         mustGift: "Musinsa Standard, SAPPUN 鞋款, MLB, Butter, Artbox",
                         desc: "於西面三正塔 10F 挑戰 Running Man 闖關遊戲體驗館！順道於西面眼鏡行（Davich / OWNDAYS）驗光選框。",
@@ -736,7 +730,7 @@
                         time: "14:15 - 17:30",
                         title: "Spa Land 汗蒸幕 (4小時體驗) 【PASS 免費】",
                         category: "special",
-                        bookingCode: "PASS 免費兌換 Spa Land 4小時體驗",
+                        bookingCode: "PASS 免費兌換 Spa Land 4小時體驗 (原價₩20,000)",
                         korean: "스파랜드 센텀시티",
                         mustEat: "Spa Land 甜米露 (식혜), 麥飯石烤雞蛋",
                         desc: "【優先安排汗蒸幕放鬆】進入五星級 Spa Land 享受天然溫泉、各式主題汗蒸房與按摩椅，徹底舒緩身心。",
@@ -759,7 +753,7 @@
                 date: "10/26",
                 week: "一",
                 title: "韓方艾灸與醫美",
-                weather: { temp: "14°C - 21°C", loc: "水營區/海雲台區", desc: "紫外線防護日", outfit: "🧢 寬簷防曬帽 / 防曬衣物 / 避開強光" },
+                weather: { temp: "14°C - 21°C", loc: "水營區/西面", desc: "紫外線防護日", outfit: "🧢 寬簷防曬帽 / 防曬衣物 / 避開強光" },
                 items: [
                     {
                         id: "d6-0",
@@ -783,30 +777,31 @@
                     {
                         id: "d6-2",
                         time: "12:00 - 13:00",
-                        title: "午餐：海雲台附近享用 (參雞湯/牛肉湯)",
+                        title: "午餐：前往西面享用 (參雞湯/牛肉湯/溫和定食)",
                         category: "food",
-                        korean: "해운대 삼계탕",
-                        mustEat: "海雲台參雞湯, 元祖牛肉湯飯",
-                        desc: "溫補養生午餐，為午後療程補充充足體力。",
-                        story: "參雞湯以鮮嫩幼雞包覆糯米與人參燉煮，滋補溫和。"
+                        korean: "서면 삼계탕 / 백화점 식당가",
+                        mustEat: "西面參雞湯, 樂天百貨美食街",
+                        desc: "由南川前往西面享用溫補養生午餐，為午後療程補充充足體力。",
+                        story: "建議在西面室內餐廳或百貨美食街享用溫和料理，避免戶外曝曬。"
                     },
                     {
                         id: "d6-3",
                         time: "14:00 - 18:00",
-                        title: "【워너비의원 부산 해운대 (Wannabe Clinic)】",
+                        title: "【Liz On 醫院 釜山 (리즈온의원 부산)】",
                         category: "special",
-                        bookingCode: "WNB-20261026-1400",
-                        korean: "워너비의원 부산해운대점",
-                        desc: "進行專業醫美諮詢與療程 (固定預約 14:00)。",
+                        bookingCode: "LIZON-20261026-1400",
+                        korean: "리즈온의원 부산 (부산 부산진구 부전동 486-6)",
+                        naverUrl: "https://naver.me/GpemZ96G",
+                        desc: "進行專業醫美諮詢與療程 (固定預約 14:00 西面 Liz On 醫院，釜山鎮區釜田洞 486-6)。",
                         story: "⚠️ <strong>術後重要注意事項：</strong> 避免紫外線曝曬、避免海風強吹、避免流汗與酒精、避免長時間戶外步行！"
                     },
                     {
                         id: "d6-4",
                         time: "18:00 以後",
-                        title: "室內晚餐 & 飯店打包整理",
+                        title: "西面室內晚餐 & 飯店打包整理",
                         category: "food",
-                        korean: "해운대 실내식당",
-                        desc: "療程結束後【全程避開室外與紫外線】，直接於百貨或室內餐廳享用溫和粥品或湯飯，回飯店休息打包。",
+                        korean: "서면 롯데백화점 식당가",
+                        desc: "療程結束後【全程避開室外與紫外線】，直接於西面樂天百貨或室內餐廳享用溫和粥品或湯飯，搭計程車回飯店休息打包。",
                         story: "醫美療程後肌膚脆弱，室內用餐並提早回飯店休息最適宜。"
                     }
                 ]
@@ -955,8 +950,8 @@
             };
             const cat = categoryMap[item.category] || categoryMap.attraction;
 
-            // Naver Map 導航搜尋網址
-            const naverMapUrl = `https://map.naver.com/p/search/${encodeURIComponent(item.korean || item.title)}`;
+            // Naver Map 導航網址 (優先使用指定的自定義網址)
+            const naverMapUrl = item.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(item.korean || item.title)}`;
 
             card.innerHTML = `
                 <div class="flex items-start justify-between gap-2 mb-2 border-b border-dashed border-stone-300 pb-2">
@@ -987,7 +982,7 @@
                     ${item.mustEat ? `<span class="tag-food text-[11px] font-bold px-2 py-0.5 rounded text-pink-950">🍎 必吃: ${item.mustEat}</span>` : ''}
                     ${item.mustOrder ? `<span class="tag-menu text-[11px] font-bold px-2 py-0.5 rounded text-orange-950">📜 必點: ${item.mustOrder}</span>` : ''}
                     ${item.mustGift ? `<span class="tag-gift text-[11px] font-bold px-2 py-0.5 rounded text-purple-950">🎁 伴手禮: ${item.mustGift}</span>` : ''}
-                    ${item.bookingCode ? `<span class="tag-booking text-[11px] font-bold px-2 py-0.5 rounded text-emerald-950">🔑 預約: <strong>${item.bookingCode}</strong></span>` : ''}
+                    ${item.bookingCode ? `<span class="tag-booking text-[11px] font-bold px-2 py-0.5 rounded text-emerald-950">🔑 <strong>${item.bookingCode}</strong></span>` : ''}
                 </div>
 
                 <div class="flex justify-between items-center pt-1">
@@ -998,7 +993,7 @@
                     ${item.story ? `
                         <button onclick="openStoryModal('${item.title}', '${encodeURIComponent(item.story)}', '${item.category}')" 
                             class="sketch-btn px-2.5 py-1 bg-yellow-200 text-stone-900 text-xs font-bold flex items-center gap-1">
-                            <i class="fa-solid fa-lightbulb text-[10px]"></i> 導遊故事&攻略
+                            <i class="fa-solid fa-lightbulb text-[10px]"></i> 導遊攻略
                         </button>
                     ` : ''}
                 </div>
@@ -1089,14 +1084,17 @@
         function renderTransitCards() {
             const list = document.getElementById('transit-cards-list');
             const transitSpots = [
-                { title: "中央站住宿飯店", kr: "부산 중구 중앙동4가 74-9", note: "Busan Central Hotel Address" },
-                { title: "釜山金海國際機場", kr: "김해국제공항 (부산 강서구 공항진입로 108)", note: "PUS Airport Entrance" },
-                { title: "釜山火車站 (KTX)", kr: "부산역 (동구 중앙대로 206)", note: "Busan KTX Station" },
-                { title: "綠色韓醫院 (艾灸體驗)", kr: "부산 수영구 수영로 382 광림빌딩 4층, 6층", note: "Green Korean Medicine Clinic" },
-                { title: "Running Man 體驗館 (西面)", kr: "부산 부산진구 중앙대로 672 삼정타워 10층", note: "Running Man Busan Samjung Tower" },
-                { title: "海雲台藍線公園 (尾浦站)", kr: "해운대 블루라인파크 미포승강장", note: "Mipo Capsule Train" },
-                { title: "Skyline Luge 釜山斜坡滑車", kr: "스카이라인루지 부산 (기장)", note: "Luge Busan Kijang" },
-                { title: "Wannabe Clinic 海雲台店", kr: "워너비의원 부산해운대점", note: "Medical Clinic Haeundae" }
+                { title: "中央站住宿飯店", kr: "부산 중구 중앙동4가 74-9", note: "Busan Central Hotel Address", url: "https://map.naver.com/p/search/" + encodeURIComponent("부산 중구 중앙동4가 74-9") },
+                { title: "Skyline Luge 釜山斜坡滑車", kr: "스카이라인루지 부산 (기장)", note: "Luge Busan Kijang", url: "https://map.naver.com/p/search/" + encodeURIComponent("스카이라인루지 부산") },
+                { title: "釜山樂天世界冒險樂園", kr: "부산 기장군 기장읍 동부산관광로 42 (롯데월드 어드벤처 부산)", note: "Lotte World Adventure Busan", url: "https://map.naver.com/p/search/" + encodeURIComponent("롯데월드 어드벤처 부산") },
+                { title: "樂天 Premium Outlets 東釜山店", kr: "부산 기장군 기장읍 기장해안로 147 (롯데몰 동부산점)", note: "Lotte Outlets Dongbusan", url: "https://map.naver.com/p/search/" + encodeURIComponent("롯데프리미엄아울렛 동부산점") },
+                { title: "海雲台藍線公園 (尾浦站)", kr: "해운대 블루라인파크 미포승강장", note: "Mipo Capsule Train", url: "https://map.naver.com/p/search/" + encodeURIComponent("해운대 블루라인파크 미포승강장") },
+                { title: "Busan X the Sky 觀景台", kr: "부산 해운대구 달맞이길 30 (부산 엑스더스카이)", note: "X the Sky 99F", url: "https://map.naver.com/p/search/" + encodeURIComponent("부산 엑스더스카이") },
+                { title: "Running Man 體驗館 (西面)", kr: "부산 부산진구 중앙대로 672 삼정타워 10층", note: "Running Man Busan Samjung Tower", url: "https://map.naver.com/p/search/" + encodeURIComponent("런닝맨 부산점") },
+                { title: "Spa Land 汗蒸幕 (Centum City)", kr: "부산 해운대구 센텀남대로 35 신세계백화점 센텀시티점", note: "Spa Land Shinsegae", url: "https://map.naver.com/p/search/" + encodeURIComponent("스파랜드 센텀시티") },
+                { title: "綠色韓醫院 (艾灸體驗)", kr: "부산 수영구 수영로 382 광림빌딩 4층, 6층", note: "Green Korean Medicine Clinic", url: "https://map.naver.com/p/search/" + encodeURIComponent("부산 수영구 수영로 382 광림빌딩") },
+                { title: "Liz On 醫院 釜山 (리즈온의원)", kr: "부산 부산진구 부전동 486-6 (리즈온의원 부산)", note: "Medical Clinic Seomyeon", url: "https://naver.me/GpemZ96G" },
+                { title: "釜山金海國際機場", kr: "김해국제공항 (부산 강서구 공항진입로 108)", note: "PUS Airport Entrance", url: "https://map.naver.com/p/search/" + encodeURIComponent("김해국제공항") }
             ];
 
             list.innerHTML = '';
@@ -1112,7 +1110,7 @@
                         <div class="text-base font-black text-stone-900 select-all">${s.kr}</div>
                     </div>
                     <div class="flex justify-end gap-2">
-                        <a href="https://map.naver.com/p/search/${encodeURIComponent(s.kr)}" target="_blank" class="sketch-btn px-2.5 py-1 bg-emerald-300 text-emerald-950 text-xs font-bold flex items-center gap-1">
+                        <a href="${s.url}" target="_blank" class="sketch-btn px-2.5 py-1 bg-emerald-300 text-emerald-950 text-xs font-bold flex items-center gap-1">
                             🗺️ Naver 導航
                         </a>
                         <button onclick="copyToClipboard('${s.kr}')" class="sketch-btn px-2.5 py-1 bg-yellow-300 text-xs font-bold">
@@ -1132,12 +1130,14 @@
             let foods = [
                 "<strong>[南浦洞]</strong> BIFF 種子糖餅 (씨앗호떡), 參兵豬肉湯飯 (참병국밥), 草梁本家小麥冷麵, 草梁烤豬肉定食 (돼지불백), 味贊王鹽烤肉",
                 "<strong>[慶州]</strong> 慶州優質韓牛燒肉, 傳統韓定食套餐, 10 韓元起司餅",
+                "<strong>[機張 / Outlet]</strong> 樂天 Premium Outlets 美食街溫和定食, 石鍋拌飯",
                 "<strong>[海雲台]</strong> 伍班長炭火烤肉 (오반장), 五福豬肉湯飯 (오복돼지국밥), 海雲台元祖牛肉湯飯, 柳氏家辣炒雞排 (유가네닭갈비)",
                 "<strong>[西面/廣安里]</strong> 松亭三代豬肉湯飯, 新昌湯飯本店, 水邊最高豬肉湯飯 (수변최고돼지국밥), 廣安里 彥陽烤牛肉 (언양불고기), Spa Land 甜米露與烤蛋"
             ];
 
             let gifts = [
                 "<strong>[南浦洞]</strong> 樂天超市 (海苔/蜂蜜奶油杏仁果/魚板禮盒), BIFF 文創商品, 大創, Olive Young",
+                "<strong>[機張]</strong> 樂天 Premium Outlets 東釜山店 (各大品牌折扣服裝、運動鞋、即時退稅)",
                 "<strong>[西面]</strong> Musinsa Standard, SAPPUN 鞋款, MLB, Butter, Artbox, 眼鏡配件",
                 "<strong>[Centum City]</strong> Matin Kim, EMIS, Pop Mart 盲盒, Shinsegae 精品"
             ];
@@ -1145,13 +1145,15 @@
             let bookings = [
                 "<strong>[10/23]</strong> KTX 慶州往返: 08:00 去程 / 17:40 回程",
                 "<strong>[10/24 09:30]</strong> Skyline Luge 斜坡滑車 4次券 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
-                "<strong>[10/24 13:30]</strong> Sky Capsule 膠囊列車 & 海岸列車 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費海岸列車</span>",
-                "<strong>[10/24 17:00]</strong> Busan X the Sky 觀景台 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/24 10:45]</strong> 釜山樂天世界冒險樂園 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費 (價值₩47,000)</span>",
+                "<strong>[10/24 12:15]</strong> 樂天 Premium Outlets 東釜山店 (購物&午餐)",
+                "<strong>[10/24 14:00]</strong> Sky Capsule 膠囊列車 & 海岸列車 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費海岸列車</span>",
+                "<strong>[10/24 17:00]</strong> Busan X the Sky 觀景台 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費 (價值₩27,000)</span>",
                 "<strong>[10/24 20:00]</strong> 廣安里 M 航展無人機燈光秀 (每週六限定觀賞)",
-                "<strong>[10/25 10:00]</strong> Running Man 釜山體驗館 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
-                "<strong>[10/25 14:15]</strong> Spa Land 汗蒸幕 4小時體驗 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費</span>",
+                "<strong>[10/25 09:30]</strong> Running Man 釜山體驗館 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費 (價值₩16,000)</span>",
+                "<strong>[10/25 14:15]</strong> Spa Land 汗蒸幕 4小時體驗 <span class='bg-emerald-200 px-1 rounded font-bold'>PASS 免費 (價值₩20,000)</span>",
                 "<strong>[10/26 10:00]</strong> 綠色韓醫院 傳統韓方艾灸體驗 (水營路 382 廣林大樓 4F/6F)",
-                "<strong>[10/26 14:00]</strong> 워너비의원 海雲台店 (Wannabe Clinic 醫美行程)"
+                "<strong>[10/26 14:00]</strong> Liz On 醫院 釜山 (리즈온의원 부산 醫美行程 - 釜田洞 486-6)"
             ];
 
             foodList.innerHTML = foods.map(f => `<li class="border-b border-pink-200 pb-1.5">${f}</li>`).join('');
